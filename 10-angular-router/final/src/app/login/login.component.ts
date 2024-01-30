@@ -1,42 +1,43 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
-import { AuthService } from '../Services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, ElementRef, ViewChild, inject } from "@angular/core";
+import { AuthService } from "../Services/auth.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.css"],
 })
 export class LoginComponent {
-  @ViewChild('username') username: ElementRef;
-  @ViewChild('password') password: ElementRef;
+  @ViewChild("username") username: ElementRef;
+  @ViewChild("password") password: ElementRef;
 
   authService: AuthService = inject(AuthService);
   router: Router = inject(Router);
   activeRoute: ActivatedRoute = inject(ActivatedRoute);
 
-  ngOnInit(){
+  ngOnInit() {
     this.activeRoute.queryParamMap.subscribe((queries) => {
-      const logout = Boolean(queries.get('logout'));
-      if(logout){
+      const logout = Boolean(queries.get("logout"));
+      if (logout) {
         this.authService.logout();
-        alert('You are now logged out. IsLogged = ' + this.authService.isLogged);
+        alert(
+          "You are now logged out. IsLogged = " + this.authService.isLogged
+        );
       }
-    })
+    });
   }
 
-  OnLoginClicked(){
+  OnLoginClicked() {
     const username = this.username.nativeElement.value;
     const password = this.password.nativeElement.value;
 
     const user = this.authService.login(username, password);
 
-    if(user === undefined){
-      alert('The login credentials you have entered is not correct.')
-    }
-    else{
-      alert('Welcome ' + user.name + '. You are logged in.');
-      this.router.navigate(['\Courses']);
+    if (user === undefined) {
+      alert("The login credentials you have entered is not correct.");
+    } else {
+      alert("Welcome " + user.name + ". You are logged in.");
+      this.router.navigate(["Courses"]);
     }
   }
 }
